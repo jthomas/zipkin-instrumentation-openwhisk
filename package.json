@@ -1,0 +1,15 @@
+{
+  "name": "zipkin-instrumentation-openwhisk",
+  "version": "0.1.0",
+  "description": "Zipkin Tracing Instrumentation Wrappers for OpenWhisk Actions and Client Library",
+  "main": "index.js",
+  "author": "James Thomas <james@jamesthom.as>",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^0.17.0",
+    "sinon": "^1.17.7"
+  },
+  "dependencies": {
+    "zipkin": "^0.5.1"
+  }
+}
