@@ -10,9 +10,30 @@ test.before(t => {
   process.env['__OW_ACTIVATION_ID'] = 'abcdefg'
 })
 
+test('should wait until tracing logger has finished before exiting', t => {
+  const record = sinon.spy()
+  const logger = { queue: [{trace: 'trace'}] }
+  const recorder = { record, logger }
+  const ctxImpl = new ExplicitContext()
+  const tracer = new Tracer({ recorder, ctxImpl })
+
+  t.plan(1)
+  const action = () => {
+    return Promise.resolve({message: 'hello world'})
+  }
+
+  setTimeout(() => {
+    logger.queue.length = 0
+  }, 100)
+
+  return wrap(action, { tracer, serviceName: 'service-a' })({}).then(result => {
+    t.is(logger.queue.length, 0)
+  })
+})
+
 test('should record trace info for asynchronous action handler without parent parameters', t => {
   const record = sinon.spy()
-  const recorder = { record }
+  const recorder = { record, logger: {queue: []} }
   const ctxImpl = new ExplicitContext()
   const tracer = new Tracer({ recorder, ctxImpl })
 
@@ -49,7 +70,7 @@ test('should record trace info for asynchronous action handler without parent pa
 
 test('should record trace info for handler with parent parameters', t => {
   const record = sinon.spy()
-  const recorder = { record }
+  const recorder = { record, logger: {queue: []}}
   const ctxImpl = new ExplicitContext()
   const tracer = new Tracer({ recorder, ctxImpl })
 
@@ -71,7 +92,7 @@ test('should record trace info for handler with parent parameters', t => {
 
 test('should record trace info for asynchronous action handler which rejects without parent parameters', t => {
   const record = sinon.spy()
-  const recorder = { record }
+  const recorder = { record, logger: {queue: []} }
   const ctxImpl = new ExplicitContext()
   const tracer = new Tracer({ recorder, ctxImpl })
 
@@ -108,7 +129,7 @@ test('should record trace info for asynchronous action handler which rejects wit
 
 test('should record trace info for synchronous action handler without parent parameters', t => {
   const record = sinon.spy()
-  const recorder = { record }
+  const recorder = { record, logger: {queue: []} }
   const ctxImpl = new ExplicitContext()
   const tracer = new Tracer({ recorder, ctxImpl })
 
@@ -145,7 +166,7 @@ test('should record trace info for synchronous action handler without parent par
 
 test('should record trace info for synchronous action handler throwing error', t => {
   const record = sinon.spy()
-  const recorder = { record }
+  const recorder = { record, logger: {queue: []} }
   const ctxImpl = new ExplicitContext()
   const tracer = new Tracer({ recorder, ctxImpl })
 
@@ -183,7 +204,7 @@ test('should record trace info for synchronous action handler throwing error', t
 
 test('should record trace info for synchronous action handler returning error', t => {
   const record = sinon.spy()
-  const recorder = { record }
+  const recorder = { record, logger: {queue: []} }
   const ctxImpl = new ExplicitContext()
   const tracer = new Tracer({ recorder, ctxImpl })
 
@@ -221,7 +242,7 @@ test('should record trace info for synchronous action handler returning error', 
 
 test('should record trace info for asynchronous action handler throwing errors without parent parameters', t => {
   const record = sinon.spy()
-  const recorder = { record }
+  const recorder = { record, logger: {queue: []} }
   const ctxImpl = new ExplicitContext()
   const tracer = new Tracer({ recorder, ctxImpl })
 
