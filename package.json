@@ -2,9 +2,24 @@
   "name": "zipkin-instrumentation-openwhisk",
   "version": "0.1.0",
   "description": "Zipkin Tracing Instrumentation Wrappers for OpenWhisk Actions and Client Library",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "keywords": [
+    "openwhisk",
+    "zipkin",
+    "nodejs"
+  ],
   "author": "James Thomas <james@jamesthom.as>",
   "license": "MIT",
+  "scripts": {
+    "test": "ava test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jthomas/zipkin-instrumentation-openwhisk.git"
+  },
   "devDependencies": {
     "ava": "^0.17.0",
     "sinon": "^1.17.7"
