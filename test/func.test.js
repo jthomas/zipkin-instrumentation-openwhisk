@@ -75,7 +75,7 @@ test('should record trace info for handler with parent parameters', t => {
   const tracer = new Tracer({ recorder, ctxImpl })
 
   t.plan(18)
-  const _zipkin = { traceId: '_parent_trace_id_', spanId: '_parent_span_id_' }
+  const _zipkin = { traceId: '_parent_trace_id_', spanId: '_span_id_', parentId: '_parent_span_id_' }
   const params = { foo: 'bar', _zipkin }
   const action = () => {
     return Promise.resolve({message: 'hello world'})
@@ -85,7 +85,7 @@ test('should record trace info for handler with parent parameters', t => {
     const annotations = record.args.map(args => args[0]);
 
     annotations.forEach(ann => t.is(ann.traceId.traceId, '_parent_trace_id_'));
-    annotations.forEach(ann => t.is(ann.traceId.spanId.value, '_parent_span_id_'));
+    annotations.forEach(ann => t.is(ann.traceId.spanId, '_span_id_'));
     annotations.forEach(ann => t.is(ann.traceId._parentId.value, '_parent_span_id_'));
   })
 })

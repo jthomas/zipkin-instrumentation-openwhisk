@@ -47,7 +47,7 @@ test('should record trace info for action invoke operations', t => {
   class BaseClass {
     request (options) {
       t.deepEqual(options.body, {a: 1, b: true, c: 'hello', _zipkin: {
-        traceId: tracer.id.traceId, spanId: tracer.id.spanId
+        traceId: tracer.id.traceId, spanId: tracer.id.spanId, parentId: tracer.id._parentId.value
       }})
       t.true(options.resolveWithFullResponse)
       return Promise.resolve({statusCode: 200, body: 'testing'})
